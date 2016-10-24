@@ -1,11 +1,12 @@
 from views import db
+
 import datetime
 
 
 class Task(db.Model):
-    __tablename__ = "tasks"
 
-    # First PK Integer column is set autoincrement=True by default
+    __tablename__ = "tasks"
+    # db.create_all() instantiates the db with the following parameters
     task_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     due_date = db.Column(db.Date, nullable=False)
@@ -14,6 +15,7 @@ class Task(db.Model):
     status = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    # Form( ) to pass values to db
     def __init__(self, name, due_date, priority, posted_date, status, user_id):
         self.name = name
         self.due_date = due_date
@@ -27,6 +29,7 @@ class Task(db.Model):
 
 
 class User(db.Model):
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)

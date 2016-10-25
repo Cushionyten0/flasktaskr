@@ -1,9 +1,8 @@
 {% extends "_base.html" %}
 {% block content %}
-<h4>logged in as: {{ username }}</h4>
 <h1>Welcome to FlaskTaskr</h1>
+<h2>logged in as: {{ username }}</h2>
 <br>
-<a href="/logout">Logout</a>
 <div class="add-task">
   <h3>Add a new task:</h3>
     <form action="{{ url_for('new_task') }}" method="post">
@@ -13,7 +12,7 @@
       <span class="error">
         {% if form.name.errors %}
           {% for error in form.name.errors %}
-            {{ error }}
+            <strong>{{ error }}</strong>
           {% endfor %}
         {% endif %}
       </span>

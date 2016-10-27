@@ -12,7 +12,7 @@
       <span class="error">
         {% if form.name.errors %}
           {% for error in form.name.errors %}
-            <strong>{{ error }}</strong>
+            {{ error }}
           {% endfor %}
         {% endif %}
       </span>

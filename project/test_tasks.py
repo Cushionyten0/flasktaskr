@@ -46,75 +46,13 @@ class AllTests(unittest.TestCase):
     def create_task(self):
         return self.app.post('add/', data=dict(
             name='Go to the bank',
-            due_date='02/05/2016',
+            due_date='02/05/2015',
             priority='1',
-            posted_date='02/04/2016',
+            posted_date='02/04/2015',
             status='1'
-            ), follow_redirects=True)
+        ), follow_redirects=True)
 
     # each test should start with 'test'
-    def test_user_setup(self):
-        new_user = User("Aleksandr", "aleksandr@gogo.com", "Aleksandr")
-        db.session.add(new_user)
-        db.session.commit()
-        test = db.session.query(User).all()
-        for t in test:
-            t.name
-        assert t.name == "Aleksandr"
-
-    def test_form_is_present_on_login_page(self):
-        response = self.app.get('/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Please sign in to access your task list',
-                      response.data)
-
-    def test_users_cannot_login_unless_registered(self):
-        response = self.login('foo', 'bar')
-        self.assertIn(b'Invalid username or password', response.data)
-
-    def test_users_can_login(self):
-        self.register('Aleksandr', 'aleksandr@gogo.com', 'python',
-                      'python')
-        response = self.login('Aleksandr', 'python')
-        self.assertIn('Welcome!', response.data)
-
-    def test_invalid_form_data(self):
-        self.register('Aleksadr', 'aleksandr@gogo.com', 'python', 'python')
-        response = self.login('alert("alert box!");', 'foo')
-        self.assertIn(b'Invalid username or password', response.data)
-
-    def test_form_is_present_on_register_page(self):
-        response = self.app.get('register/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Please register to access the task list.',
-                      response.data)
-
-    def test_user_registration(self):
-        self.app.get('regoster/', follow_redirects=True)
-        response = self.register('Aleksandr', 'aleksandr@gogo.com', 'python',
-                                 'python')
-        self.assertIn(b'Thanks for registering. Please login.', response.data)
-
-    def test_user_registration_error(self):
-        self.app.get('register/', follow_redirects=True)
-        self.register('Aleksandr', 'aleksandr@gogo.com', 'python',
-                      'python')
-        self.app.get('register/', follow_redirects=True)
-        response = self.register('Aleksandr', 'aleksandr@gogo.com', 'python',
-                                 'python')
-        self.assertIn(b'That username and/or email already exist.',
-                      response.data)
-
-    def test_logge_in_users_can_logout(self):
-        self.register('Aleksandr', 'aleksandr@gogo.com', 'python', 'python')
-        self.login('Aleksandr', 'python')
-        response = self.logout()
-        self.assertIn(b'Goodbye!', response.data)
-
-    def test_not_logged_in_users_cannot_logout(self):
-        response = self.logout()
-        self.assertNotIn(b'Goodbye!', response.data)
-
     def test_logged_in_users_can_access_tasks_page(self):
         self.register('Aleksandr', 'aleksadr@gogo.com', 'python', 'python')
         self.login('Aleksandr', 'python')
@@ -164,13 +102,13 @@ class AllTests(unittest.TestCase):
         self.assertIn(b'The task was deleted', response.data)
 
     def test_users_cannot_complete_tasks_that_are_not_created_by_them(self):
-        self.create_user('Michael', 'michael@realpython.com', 'python')
-        self.login('Michael', 'python')
+        self.create_user('Aleksandr', 'aleksadr@gogo.com', 'python')
+        self.login('Aleksandr', 'python')
         self.app.get('tasks/', follow_redirects=True)
         self.create_task()
         self.logout()
-        self.create_user('Fletcher', 'fletcher@realpython.com', 'python101')
-        self.login('Fletcher', 'python101')
+        self.create_user('Thisguy', 'thisguy@gogo.com', 'python')
+        self.login('Thisguy', 'python')
         self.app.get('tasks/', follow_redirects=True)
         response = self.app.get("complete/1/", follow_redirects=True)
         self.assertNotIn(

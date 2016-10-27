@@ -4,6 +4,8 @@ from wtforms import StringField, DateField, IntegerField, \
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 
 
+# any fields that have validators attached will have errors added under
+# form.field_name.errors.
 class AddTaskForm(Form):
     task_id = IntegerField()
     name = StringField('Task Name', validators=[DataRequired()])

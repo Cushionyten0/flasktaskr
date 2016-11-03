@@ -2,8 +2,8 @@ import os
 import unittest
 
 from views import app, db
-from _config import basedir
-from models import User
+from project._config import basedir
+from project.models import User, Task
 
 TEST_DB = 'test.db'
 

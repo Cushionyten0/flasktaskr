@@ -30,7 +30,6 @@ def logout():
     # remove the username from the session if it's there
     session.pop('logged_in', None)
     session.pop('user_id', None)
-    session.pop('user_name', None)
     flash('Goodbye!')
     return redirect(url_for('users.login'))
 
@@ -38,14 +37,13 @@ def logout():
 @users_blueprint.route('/', methods=['GET', 'POST'])
 def login():
     error = None
-    form = LoginForm(request.form)
+    form = LoginForm(request.form)  # request.form not required
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User.query.filter_by(name=request.form['name']).first()
             if user is not None and user.password == request.form['password']:
                 session['user_id'] = user.id
                 session['logged_in'] = True
-                session['user_name'] = request.form['name']
                 session['role'] = user.role
                 flash('Welcome!')
                 return redirect(url_for('tasks.tasks'))

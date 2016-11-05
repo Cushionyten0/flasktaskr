@@ -168,5 +168,13 @@ class AllTests(unittest.TestCase):
             b'You can only update tasks that belong to you.', response.data
         )
 
+    def test_task_template_displays_logged_in_user_name(self):
+        self.register(
+            'Aleksandr', 'aleks@gogo.com', 'python', 'python'
+        )
+        self.login('Aleksandr', 'python')
+        response = self.app.get("tasks/", follow_redirects=True)
+        self.assertIn(b'Aleksandr', response.data)
+
 if __name__ == "__main__":
     unittest.main()

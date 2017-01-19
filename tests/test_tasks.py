@@ -176,5 +176,19 @@ class AllTests(unittest.TestCase):
         response = self.app.get("tasks/", follow_redirects=True)
         self.assertIn(b'Aleksandr', response.data)
 
+    def test_users_cannot_see_task_modify_links_for_tasks_not_created_by_them(self):
+        self.register('Aleksadr', 'aleksandr@gogo.com', 'python', 'python')
+        self.login('Aleksandr', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.register('Thisguy', 'thisguy@gogo.com', 'python', 'python')
+        self.login('Thisguy', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        response = self.app.get("delete", follow_redirects=True)
+        self.assertNotIn(b'You can only update tasks that belong to you.',
+                         response.data)
+
+
 if __name__ == "__main__":
     unittest.main()
